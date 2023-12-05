@@ -73,9 +73,7 @@ vector<int> solution(vector<string> info, vector<string> query) {
         conv_info(info[i]);
     
     for(auto _s : query)
-    {
         answer.push_back(find_query(_s));
-    }
     
     return answer;
 }
