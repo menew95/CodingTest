@@ -1,45 +1,25 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-
-using namespace std;
-
-int solution(vector<int>& score)
-{
-	vector<int> _dp(score.size(), 0);
-
-	_dp[0] = score[0];
-
-	_dp[1] = max(score[1], score[0] + score[1]);
-
-    if(score.size() == 2)
-        return _dp[1];
-    
-	_dp[2] = score[2] + max(score[0], score[1]);
-    
-    if(score.size() == 3)
-	    return max(_dp[2], score[0] + score[1]);
-
-	for (int i = 3; i < score.size(); i++)
-	{
-		_dp[i] = max(_dp[i - 2] + score[i], score[i - 1] + score[i] + _dp[i - 3]);
-	}
-
-	return _dp.back();
-}
 
 int main()
 {
-	int _cnt;
+    int n; // 계단 수
+    int score[301]; // 계단 점수 (1-based)
+    int dp[301][3] = {0}; // 모두 0으로 초기화
+    
+    std::cin >> n;
+    for(int i = 1; i <= n; i++) // 1-based indexing으로 입력받기
+        std::cin >> score[i];
+    
+    dp[1][1] = score[1];
+    dp[1][2] = 0;
 
-	cin >> _cnt;
+    for(int i = 2; i <= n; i++) {
+        dp[i][1] = std::max(dp[i-2][1], dp[i-2][2]) + score[i];
+        dp[i][2] = dp[i-1][1] + score[i];
+    }
 
-	vector<int> _score(_cnt);
-
-	for (int i = 0; i < _cnt; i++)
-	{
-		cin >> _score[i];
-	}
-
-	cout << solution(_score) << endl;
+    int answer = std::max(dp[n][1], dp[n][2]);
+    std::cout << answer;
+    return 0;
 }
